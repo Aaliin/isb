@@ -40,3 +40,4 @@ if __name__ == "__main__":
         os.path.join("lab_1", "purpose_1", "encryption_key.txt"),
         "Ключ к шифру императора Августа\n", 1
     )
+

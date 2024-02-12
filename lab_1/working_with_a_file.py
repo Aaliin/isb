@@ -22,3 +22,4 @@ def saving_text(dict: dict, path: str, header: str) -> None:
         file.write(f"{header}\n")
         for key, value in dict.items():
             file.write(f"{key} ~ {value}\n")
+
