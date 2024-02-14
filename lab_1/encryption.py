@@ -23,8 +23,7 @@ def encrypt(path: str, new_path: str, step: int) -> None:
             cipher_str += RUS[new_place]
         write_text(new_path, cipher_str)
     except Exception as ex:
-        logging.error(
-            f"Data could not be encrypted : {ex.message}\n{ex.args}\n")
+        logging.error(f"Data could not be encrypted : {ex.message}\n{ex.args}\n")
 
 
 def cipher_key(path: str, step: int) -> None:
@@ -46,9 +45,7 @@ if __name__ == "__main__":
         main = json.load(file)
 
     encrypt(
-        os.path.join(
-            main["directory"], main["folder_1"], main["initial_text"]
-        ),
+        os.path.join(main["directory"], main["folder_1"], main["initial_text"]),
         os.path.join(main["directory"], main["folder_1"],  main["my_encrypted"]),
         main["step"],
     )
