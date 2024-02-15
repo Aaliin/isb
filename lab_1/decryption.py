@@ -1,6 +1,6 @@
-import os
-import logging
 import json
+import logging
+import os
 from working_with_a_file import open_file, write_text, saving_values
 
 
@@ -9,7 +9,8 @@ logging.basicConfig(level=logging.INFO)
 
 def text_analysis(path: str, new_path: str) -> None:
     """Осуществляет анализ зашифрованного текста; принимает путь к файлу 
-    с исходным текстом, путь к новому файлу, в который пойдет запись"""
+    с исходным текстом, путь к новому файлу, в который пойдет запись
+    """
     text = open_file(path)
     dict_my = dict()
     for i in text:
@@ -20,7 +21,8 @@ def text_analysis(path: str, new_path: str) -> None:
 
 def decryption(path: str, keys: str, new_path: str) -> None:
     """Осуществляет расшифровку исходного текста; принимает путь к файлу с исходным 
-    текстом, ключ шифрования и путь к новому файлу, в который пойдет запись"""
+    текстом, ключ шифрования и путь к новому файлу, в который пойдет запись
+    """
     try:
         text = open_file(path)
         with open(keys, "r", encoding="utf-8") as file:
