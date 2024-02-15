@@ -6,7 +6,7 @@
     "initial_text": "source_text.txt",
     "my_encrypted": "encrypted_text.txt",
     "cipher_key": "encryption_key.json",
-    "encrypted_text": "code3.txt",
+    "code_text": "code3.txt",
     "text_analysis": "text_analysis.json", 
     "decrypted": "decrypted_message.txt"
 }

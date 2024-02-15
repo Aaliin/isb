@@ -32,5 +32,4 @@ def saving_values(dict: dict, path: str) -> None:
         with open(path, "w", encoding="utf-8") as f:
             f.write(json.dumps(dict, ensure_ascii=False, indent=4))
     except Exception as ex:
-        logging.error(
-            f"An error occurred while saving : {ex.message}\n{ex.args}\n")
+        logging.error(f"An error occurred while saving: {ex.message}\n{ex.args}\n")
