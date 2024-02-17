@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+
 from working_with_a_file import open_file, write_text, saving_values
 
 
@@ -19,9 +20,19 @@ def text_analysis(path: str, new_path: str) -> None:
     saving_values(sort, new_path)
 
 
-def decryption(path: str, keys: str, new_path: str) -> None:
+def decoded(old_str: str, new_str: str, text: str, path: str, dict: dict) -> str:
+    """Осуществляет замену символов в тексте; принимает исходный символ, символ на 
+    который заменяем, зашифрованный текст, путь к файлу, в который пойдет запись 
+    """
+    text = text.replace(old_str, new_str)
+    dict[old_str] = new_str
+    saving_values(dict, path)
+    return text
+
+
+def decryption(path: str, new_path: str, keys: str) -> None:
     """Осуществляет расшифровку исходного текста; принимает путь к файлу с исходным 
-    текстом, ключ шифрования и путь к новому файлу, в который пойдет запись
+    текстом, путь к новому файлу, в который пойдет запись, ключ шифрования
     """
     try:
         text = open_file(path)
@@ -43,6 +54,6 @@ if __name__ == "__main__":
     )
     decryption(
         os.path.join(main["directory"], main["folder_2"], main["code_text"]),
-        os.path.join(main["directory"], main["folder_2"], main["cipher_key"]),
         os.path.join(main["directory"], main["folder_2"], main["decrypted"]),
+        os.path.join(main["directory"], main["folder_2"], main["cipher_key"]),
     )
