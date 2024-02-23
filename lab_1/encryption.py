@@ -4,6 +4,7 @@ import os
 
 from working_with_a_file import open_file, write_text, saving_values
 
+
 logging.basicConfig(level=logging.INFO)
 
 RUS = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
