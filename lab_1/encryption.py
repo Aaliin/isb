@@ -17,11 +17,11 @@ def encrypt(path: str, new_path: str) -> None:
     try:
         data = open_file(path)
         cipher_str = ""
-        for i in data:
-            if i == " ":
-                cipher_str += i
+        for i in range(len(data)):
+            if data[i] == " ":
+                cipher_str += " "
                 continue
-            place = (RUS[::-1].find(i)) % len(RUS)
+            place = RUS[::-1].find(data[i]) % len(RUS) 
             cipher_str += RUS[place]
         write_text(new_path, cipher_str)
     except Exception as ex:
