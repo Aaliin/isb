@@ -7,7 +7,7 @@ from working_with_a_file import open_file, write_text, saving_values
 
 logging.basicConfig(level=logging.INFO)
 
-RUS = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+RUS = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ "
 
 
 def encrypt(path: str, new_path: str) -> None:
@@ -17,10 +17,7 @@ def encrypt(path: str, new_path: str) -> None:
     try:
         data = open_file(path)
         cipher_str = ""
-        for i in range(len(data)):
-            if data[i] == " ":
-                cipher_str += " "
-                continue
+        for i in range(len(data)): 
             place = RUS[::-1].find(data[i]) % len(RUS) 
             cipher_str += RUS[place]
         write_text(new_path, cipher_str)
