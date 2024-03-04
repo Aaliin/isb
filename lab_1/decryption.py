@@ -46,14 +46,14 @@ def decryption(path: str, new_path: str, keys: str) -> None:
 
 
 if __name__ == "__main__":
-    with open(os.path.join("lab_1", "main.json"), "r") as file:
-        main = json.load(file)
+    with open(os.path.join("lab_1", "setting.json"), "r") as file:
+        settings = json.load(file)
     text_analysis(
-        os.path.join(main["directory"], main["folder_2"], main["code_text"]),
-        os.path.join(main["directory"], main["folder_2"], main["text_analysis"]),
+        os.path.join(settings["directory"], settings["folder_2"], settings["code_text"]),
+        os.path.join(settings["directory"], settings["folder_2"], settings["text_analysis"]),
     )
     decryption(
-        os.path.join(main["directory"], main["folder_2"], main["code_text"]),
-        os.path.join(main["directory"], main["folder_2"], main["decrypted"]),
-        os.path.join(main["directory"], main["folder_2"], main["cipher_key"]),
+        os.path.join(settings["directory"], settings["folder_2"], settings["code_text"]),
+        os.path.join(settings["directory"], settings["folder_2"], settings["decrypted"]),
+        os.path.join(settings["directory"], settings["folder_2"], settings["cipher_key"]),
     )

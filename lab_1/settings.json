@@ -7,5 +7,6 @@
     "cipher_key": "encryption_key.json",
     "code_text": "code3.txt",
     "text_analysis": "text_analysis.json", 
-    "decrypted": "decrypted_message.txt"
+    "decrypted": "decrypted_message.txt",
+    "key": "ДЖОАН"
 }
