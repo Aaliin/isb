@@ -2,12 +2,19 @@ import json
 import logging
 import os
 
+from enum import Enum
 from working_with_a_file import open_file, write_text, saving_values
 
 
 logging.basicConfig(level=logging.INFO)
 
 RUS = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+
+
+class Action(Enum):
+    """Класс для выбора опции работы с текстом"""
+    ENCRYPTION = 0
+    DECRYPTION = 1
 
 
 def cipher_key(path: str, key_my: str) -> dict:
@@ -26,9 +33,9 @@ def cipher_key(path: str, key_my: str) -> dict:
     return key
 
 
-def encrypt(path: str, new_path: str, key_my: dict) -> None:
-    """Осуществляет шифрование текста; принимает путь к файлу с 
-    исходным текстом, путь к новому файлу, в который пойдет запись
+def encryption(path: str, new_path: str, key_my: dict, action: Action) -> None:
+    """Осуществляет шифрование и дешифрование текста; принимает путь к 
+    файлу с исходным текстом, путь к новому файлу, в который пойдет запись
     и директорию, содержащую сдвиги, в соответвии с выбранным словом
     """
     try:
@@ -36,32 +43,17 @@ def encrypt(path: str, new_path: str, key_my: dict) -> None:
         cipher_str = ""
         for i in range(len(data)):
             if data[i] == " ":
-                cipher_str += " "
+                cipher_str += " " 
+                continue
+            if action == Action.ENCRYPTION:
+                place = (RUS.find(data[i]) + key_my[i % len(key_my)]) % len(RUS)
             else:
-                place = (RUS.find(data[i]) + key_my[i % len(key_my)]) % len(RUS) 
-                cipher_str += RUS[place]
+                place = (RUS.find(data[i]) - key_my[i % len(key_my)] + len(RUS)) % len(RUS)
+            cipher_str += RUS[place] 
         write_text(new_path, cipher_str)
     except Exception as ex:
-        logging.error(f"Data could not be encrypted: {ex.message}\n{ex.args}\n")
-
-
-def decoded(path: str, new_path: str, key_my: dict) -> None:
-    """Осуществляет дешифрование текста; принимает путь к файлу с 
-    зашифрованным текстом, путь к новому файлу, в который пойдет запись
-    и директорию, содержащую сдвиги, в соответвии с выбранным словом
-    """
-    try:
-        data = open_file(path)
-        cipher_str = ""
-        for i in range(len(data)):
-            if data[i] == " ":
-                cipher_str += " "
-            else:
-                place = (RUS.find(data[i]) - key_my[i % len(key_my)] + len(RUS)) % len(RUS) 
-                cipher_str += RUS[place]
-        write_text(new_path, cipher_str)
-    except Exception as ex:
-        logging.error(f"Data could not be encrypted: {ex.message}\n{ex.args}\n")
+        logging.error(
+            f"Data could not be encrypted: {ex.message}\n{ex.args}\n")
 
 
 if __name__ == "__main__":
@@ -70,14 +62,14 @@ if __name__ == "__main__":
     cipher_key = cipher_key(
         os.path.join(settings["directory"], settings["folder_1"], settings["cipher_key"]),
         settings["key"],
-    )
-    encrypt(
+    ) 
+    encryption(
         os.path.join(settings["directory"], settings["folder_1"], settings["initial_text"]),
         os.path.join(settings["directory"], settings["folder_1"], settings["my_encrypted"]),
-        cipher_key
+        cipher_key, Action.ENCRYPTION
     )
-    decoded(
+    encryption(
         os.path.join(settings["directory"], settings["folder_1"], settings["my_encrypted"]),
         os.path.join(settings["directory"], settings["folder_1"], settings["decrypted"]),
-        cipher_key
+        cipher_key, Action.DECRYPTION
     )
