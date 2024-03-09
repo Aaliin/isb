@@ -4,57 +4,46 @@ import math
 import os
 
 
-from working_with_a_file import write_text, saving_text
-
 logging.basicConfig(level=logging.INFO)
 
 
-def frequency_bitwise_test(data: str, path: str) -> None:
-    sum_n = 0
-    dict_value = {"0": -1, "1": 1}
+def frequency_bitwise_test(data: str) -> float:
+    sum_n = 0 
     try:
-        for i in data:
-            sum_n += dict_value[i]
-        sum_n = sum_n/math.sqrt(len(data))
-        p_value = math.erfc(sum_n/math.sqrt(2))
-        write_text(path, p_value)
+        one = data.count("1")
+        zero = data.count("0")  
+        sum_n = abs(one - zero)/math.sqrt(len(data)) 
+        return math.erfc(sum_n/math.sqrt(2))  
     except Exception as ex:
         logging.error(f"Division by zero: {ex.message}\n{ex.args}\n") 
 
 
-def same_consecutive_bits(data: str, path: str) -> None:
+def same_consecutive_bits(data: str) -> float: 
     sum_n = 0
-    dict_value = {"0": -1, "1": 1}
     try:
-        for i in data:
-            sum_n += dict_value[i]
-        sum_n = sum_n/len(data)
+        sum_n = data.count("1")/len(data)
         comparison = abs(sum_n-0.5)
-        module = 2/math.sqrt(len(data))
+        module = 2/math.sqrt(len(data)) 
         if comparison >= module:
             return 0
         v_n = 0
-        for i in len(data)-1:
-            if data[i] != data[i+1]:
-                v_n += 1
-        p_value = math.erfc((abs(v_n-2*len(data)*sum_n*(1-sum_n))) /
-                            (2*sum_n*(1-sum_n)*math.sqrt(2*len(data))))
-        write_text(path, p_value)
+        for j in range(len(data)-1):
+            if data[j] != data[j+1]:
+                v_n += 1   
+        return math.erfc((abs(v_n-2*len(data)*sum_n*(1-sum_n))) /
+                            (2*sum_n*(1-sum_n)*math.sqrt(2*len(data)))) 
     except Exception as ex:
         logging.error(f"Division by zero: {ex.message}\n{ex.args}\n") 
 
 
-def longest_sequence_of_units(data: str, path: str) -> None:
+def longest_sequence_of_units(data: str) -> float:
     block_length = 8 
-    count = len(data)/block_length
-    try: 
-        value = 0
-        for i in range(0, len(data)-block_length, block_length):
-            if data[i] == 1 and data[i+1] == 0:
-                value += 1
-
-        p_value = 
-        write_text(path, p_value)
+    n_i = [0.2148, 0.3672, 0.2305, 0.1875]
+    #count = len(data)/block_length
+    try:  
+        for i in range(0, len(data), block_length): 
+            value = 0 
+        return p_value
     except Exception as ex:
         logging.error(f"Division by zero: {ex.message}\n{ex.args}\n")
 
@@ -62,17 +51,12 @@ def longest_sequence_of_units(data: str, path: str) -> None:
 if __name__ == "__main__":
     with open(os.path.join("lab_2", "settings.json"), "r") as file:
         settings = json.load(file)
-    frequency_bitwise_test(settings["c++"],
-                        os.path.join(settings["directory"], settings["folder_1"], settings["c_sequence"]),)
-    same_consecutive_bits(settings["c++"],
-                        os.path.join(settings["directory"], settings["folder_2"], settings["c_sequence"]),)
-    longest_sequence_of_units(settings["c++"],
-                            os.path.join(settings["directory"], settings["folder_3"], settings["c_sequence"]),)
-
-
-    frequency_bitwise_test(settings["java"],
-                        os.path.join(settings["directory"], settings["folder_1"], settings["java_sequence"]),)
-    same_consecutive_bits(settings["java"],
-                        os.path.join(settings["directory"], settings["folder_2"], settings["java_sequence"]),)
-    longest_sequence_of_units(settings["java"],
-                            os.path.join(settings["directory"], settings["folder_3"], settings["java_sequence"]),)
+    c = settings["c++"]
+    java = settings["java"]
+    with open(os.path.join(settings["directory"], settings["result"]), "w", encoding="utf-8") as main: 
+            main.write(f"test_frequency_bitwise:\n\tc++: {frequency_bitwise_test(c)}\n\t")
+            main.write(f"java: {frequency_bitwise_test(java)}\n")
+            main.write(f"test_same_consecutive_bits:\n\tc++: {same_consecutive_bits(c)}\n\t")
+            main.write(f"java: {same_consecutive_bits(java)}\n")
+            main.write(f"test_longest_sequence_of_units:\n\tc++: {longest_sequence_of_units(c)}\n\t")
+            main.write(f"java: {longest_sequence_of_units(java)}\n") 
