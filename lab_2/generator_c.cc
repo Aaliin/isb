@@ -2,7 +2,7 @@
 #include <random>
 #include <ctime>
 
-#define MAX 100
+#define MAX 128
 
 using namespace std;
 
@@ -16,6 +16,5 @@ int generator() {
 }
 
 int main() {
-    cout << generator();
-    // 01010100101110111101010111110100111000001101011001100101101100110000111000101011001001100100000100100
+    cout << generator(); 
 }
