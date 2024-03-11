@@ -6,15 +6,18 @@
 
 using namespace std;
 
-int generator() {
+int generator()
+{
     srand(time(0));
-    for (int i = 0; i < MAX; ++i) {
-        unsigned long value = (8253729 * rand() + 2396403) % 32768;
+    for (int i = 0; i < MAX; ++i)
+    {
+        unsigned long value = (1021 * rand() + 24631) % 116640;
         std::cout << value % 2;
     }
     return 0;
 }
 
-int main() {
-    cout << generator(); 
+int main()
+{
+    cout << generator();
 }
