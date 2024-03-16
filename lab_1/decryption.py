@@ -24,19 +24,6 @@ def text_analysis(path: str, new_path: str) -> None:
         logging.error(f"The directory could not be opened: {ex.message}\n{ex.args}\n")
 
 
-def decoded(old_str: str, new_str: str, text: str, path: str, dict: dict) -> None:
-    """Осуществляет замену символов в тексте; принимает исходный символ, символ на 
-    который заменяем, зашифрованный текст, путь к файлу, в который пойдет запись 
-    """
-    try:
-        dict[old_str] = new_str
-        for char in dict.keys():
-            text = text.replace(char, dict[char])
-        saving_values(dict, path)
-    except Exception as ex:
-        logging.error(f"The values could not be changed: {ex.message}\n{ex.args}\n")
-
-
 def decryption(path: str, new_path: str, keys: str) -> None:
     """Осуществляет расшифровку исходного текста; принимает путь к файлу с исходным 
     текстом, путь к новому файлу, в который пойдет запись, ключ шифрования
@@ -45,9 +32,8 @@ def decryption(path: str, new_path: str, keys: str) -> None:
         text = open_file(path)
         with open(keys, "r", encoding="utf-8") as file:
             dict_my = json.load(file)
-        for item in dict_my.items():
-            text = text.replace(item[0], item[1])
-        write_text(new_path, text)
+        result = "".join(dict_my.get(letter, letter) for letter in text) 
+        write_text(new_path, result)
     except Exception as ex:
         logging.error(f"The directory could not be opened: {ex.message}\n{ex.args}\n")
 
@@ -63,4 +49,4 @@ if __name__ == "__main__":
         os.path.join(settings["directory"], settings["folder_2"], settings["code_text"]),
         os.path.join(settings["directory"], settings["folder_2"], settings["decrypted"]),
         os.path.join(settings["directory"], settings["folder_2"], settings["cipher_key"]),
-    )
+    ) 
