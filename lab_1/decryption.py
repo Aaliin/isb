@@ -9,8 +9,9 @@ logging.basicConfig(level=logging.INFO)
 
 
 def text_analysis(path: str, new_path: str) -> None:
-    """Осуществляет анализ зашифрованного текста; принимает путь к файлу 
-    с исходным текстом, путь к новому файлу, в который пойдет запись
+    """Осуществляет анализ зашифрованного текста;
+    path - файлу с исходным текстом
+    new_patth - путь к новому файлу, в который пойдет запись
     """
     try:
         text = open_file(path)
@@ -24,13 +25,15 @@ def text_analysis(path: str, new_path: str) -> None:
         logging.error(f"The directory could not be opened: {ex.message}\n{ex.args}\n")
 
 
-def decryption(path: str, new_path: str, keys: str) -> None:
-    """Осуществляет расшифровку исходного текста; принимает путь к файлу с исходным 
-    текстом, путь к новому файлу, в который пойдет запись, ключ шифрования
+def decryption(path: str, new_path: str, key: str) -> None:
+    """Осуществляет расшифровку исходного текста; 
+    path - файлу с исходным текстом
+    new_patth - путь к новому файлу, в который пойдет запись
+    key - путь к файлу, в котором хранится ключ шифрования
     """
     try:
         text = open_file(path)
-        with open(keys, "r", encoding="utf-8") as file:
+        with open(key, "r", encoding="utf-8") as file:
             dict_my = json.load(file)
         result = "".join(dict_my.get(letter, letter) for letter in text) 
         write_text(new_path, result)

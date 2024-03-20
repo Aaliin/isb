@@ -6,7 +6,9 @@ logging.basicConfig(level=logging.INFO)
 
 
 def open_file(path: str) -> str:
-    """Осуществляет открытие файла и принимает путь к файлу"""
+    """Осуществляет открытие файла 
+    path - путь к файлу, необходимый для открытия
+    """
     try:
         with open(path, "r+", encoding="utf-8") as file:   
             main = file.read()
@@ -16,8 +18,9 @@ def open_file(path: str) -> str:
 
 
 def write_text(path: str, data: str) -> None:
-    """Осуществляет запись данных в файл принимает 
-    путь к файлу и данные для записи
+    """Осуществляет запись данных в файл 
+    path - путь к файлу, в который пойдет запись
+    data - данные для записи
     """
     try:
         with open(path, "w", encoding="utf-8") as file: 
@@ -28,7 +31,8 @@ def write_text(path: str, data: str) -> None:
 
 def saving_values(dict: dict, path: str) -> None:
     """Осуществляет сохранение данных в json-файл
-    принимает путь к файлу и данные для записи
+    path - путь к файлу, в который пойдет запись
+    dict - данные для записи
     """
     try:
         with open(path, "w", encoding="utf-8") as f:
