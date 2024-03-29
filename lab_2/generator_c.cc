@@ -6,6 +6,12 @@
 
 using namespace std;
 
+/**
+ * @brief Необходима для генерации случайной бинарной последовательности
+ * длиной 128 бит и вывода ее в консоль
+ * 
+ * @return 0 если программа успешно завершена
+ */
 int generator()
 {
     srand(time(0));
@@ -17,6 +23,9 @@ int generator()
     return 0;
 }
 
+/**
+ * @brief Необходима для вызова функции generator()
+ */
 int main()
 {
     cout << generator();

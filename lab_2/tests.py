@@ -2,13 +2,17 @@ import json
 import logging
 import math
 import mpmath
-import os 
+import os
 
+
+n_i = [0.2148, 0.3672, 0.2305, 0.1875]
 
 logging.basicConfig(level=logging.INFO)
 
 
 def frequency_bitwise_test(data: str) -> float:
+    '''Производит частотный побитовый тест
+    data - строка, представляющая собой числовую последовательность'''
     sum_n = 0
     try:
         one = data.count("1")
@@ -21,6 +25,8 @@ def frequency_bitwise_test(data: str) -> float:
 
 
 def same_consecutive_bits(data: str) -> float:
+    '''Производит тест на одинаковые подряд идущие биты
+    data - строка, представляющая собой числовую последовательность'''
     sum_n = 0
     v_n = 0
     try:
@@ -40,9 +46,10 @@ def same_consecutive_bits(data: str) -> float:
 
 
 def longest_sequence_of_units(data: str) -> float:
+    '''Производит тест на самую длинную последовательность единиц в блоке
+    data - строка, представляющая собой числовую последовательность'''
     block_length = 8
-    n_i = [0.2148, 0.3672, 0.2305, 0.1875]
-    value = [0]*4
+    value = {0: 0, 1: 0, 2: 0, 3: 0}
     xi = 0
     try:
         for i in range(0, len(data), block_length):
@@ -57,13 +64,13 @@ def longest_sequence_of_units(data: str) -> float:
                     count = 0
                 max_num = max(count, prev)
             match max_num:
-                case max_num if max_num <= 1:
+                case 0 | 1:
                     value[0] += 1
                 case 2:
                     value[1] += 1
                 case 3:
                     value[2] += 1
-                case max_num if max_num >= 4:
+                case 4 | 5 | 6 | 7 | 8:
                     value[3] += 1
         for j in range(len(n_i)):
             xi += pow(value[j]-16*n_i[j], 2)/(16*n_i[j])
