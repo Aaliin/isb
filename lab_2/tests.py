@@ -12,9 +12,8 @@ logging.basicConfig(level=logging.INFO)
 
 def frequency_bitwise_test(data: str) -> float:
     """Производит частотный побитовый тест
-
-data - строка, представляющая собой числовую последовательность
-"""
+    data - строка, представляющая собой числовую последовательность
+    """
     sum_n = 0
     try:
         one = data.count("1")
@@ -28,9 +27,8 @@ data - строка, представляющая собой числовую п
 
 def same_consecutive_bits(data: str) -> float:
     """Производит тест на одинаковые подряд идущие биты
-
-data - строка, представляющая собой числовую последовательность
-"""
+    data - строка, представляющая собой числовую последовательность
+    """
     sum_n = 0
     v_n = 0
     try:
@@ -51,9 +49,8 @@ data - строка, представляющая собой числовую п
 
 def longest_sequence_of_units(data: str) -> float:
     """Производит тест на самую длинную последовательность единиц в блоке
-
-data - строка, представляющая собой числовую последовательность
-"""
+    data - строка, представляющая собой числовую последовательность
+    """
     block_length = 8
     value = {0: 0, 1: 0, 2: 0, 3: 0}
     xi = 0
@@ -87,8 +84,11 @@ data - строка, представляющая собой числовую п
 
 
 if __name__ == "__main__":
-    with open(os.path.join("lab_2", "settings.json"), "r") as file:
-        settings = json.load(file)
+    try:
+        with open(os.path.join("lab_2", "settings.json"), "r") as file:
+            settings = json.load(file)
+    except Exception as ex:
+        logging.error(f"Error opening the file: {ex.message}\n{ex.args}\n")
     c = settings["c++"]
     java = settings["java"]
     with open(os.path.join("lab_2", "nist_result.txt"), "w", encoding="utf-8") as main:
