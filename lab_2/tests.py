@@ -91,10 +91,14 @@ if __name__ == "__main__":
         logging.error(f"Error opening the file: {ex.message}\n{ex.args}\n")
     c = settings["c++"]
     java = settings["java"]
-    with open(os.path.join("lab_2", "nist_result.txt"), "w", encoding="utf-8") as main:
-        main.write(f"test_frequency_bitwise:\n\tc++: {frequency_bitwise_test(c)}\n\t")
-        main.write(f"java: {frequency_bitwise_test(java)}\n")
-        main.write(f"test_same_consecutive_bits:\n\tc++: {same_consecutive_bits(c)}\n\t")
-        main.write(f"java: {same_consecutive_bits(java)}\n")
-        main.write(f"test_longest_sequence_of_units:\n\tc++: {longest_sequence_of_units(c)}\n\t")
-        main.write(f"java: {longest_sequence_of_units(java)}\n")
+    try:
+        with open(os.path.join("lab_2", "nist_result.txt"), "w", encoding="utf-8") as main:
+            main.write(f"test_frequency_bitwise:\n\tc++: {frequency_bitwise_test(c)}\n\t")
+            main.write(f"java: {frequency_bitwise_test(java)}\n")
+            main.write(f"test_same_consecutive_bits:\n\tc++: {same_consecutive_bits(c)}\n\t")
+            main.write(f"java: {same_consecutive_bits(java)}\n")
+            main.write(f"test_longest_sequence_of_units:\n\tc++: {longest_sequence_of_units(c)}\n\t")
+            main.write(f"java: {longest_sequence_of_units(java)}\n")
+    except Exception as ex:
+        logging.error(f"Error opening the file: {ex.message}\n{ex.args}\n")
+    
