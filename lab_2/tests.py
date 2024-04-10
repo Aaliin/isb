@@ -101,4 +101,3 @@ if __name__ == "__main__":
             main.write(f"java: {longest_sequence_of_units(java)}\n")
     except Exception as ex:
         logging.error(f"Error opening the file: {ex.message}\n{ex.args}\n")
-    
