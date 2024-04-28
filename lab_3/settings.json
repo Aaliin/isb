@@ -1,0 +1,10 @@
+{ 
+    "initial_text": "text/initial_text.txt",
+    "encrypted_text": "text/encrypted_text.txt",
+    "decrypted_text": "text/decrypted_text.txt",
+    "symmetric_key": "symmetric/symmetric_key.txt",
+    "symmetric_encrypted_key": "symmetric/encrypted_key.txt",
+    "symmetric_decrypted_key": "symmetric/decrypted_key.txt", 
+    "asymmetric_public": "asymmetric/public.pem",
+    "asymmetric_private": "asymmetric/private.pem"
+}

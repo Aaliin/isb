@@ -1,67 +1,41 @@
-import logging
-import main
-import sys
-
-from PyQt6.QtWidgets import (QApplication, QGridLayout, QLabel, QMainWindow, QPushButton,  QVBoxLayout, QWidget,)
+import argparse
+import json
+import os
 
 
-logging.basicConfig(level=logging.INFO)
+from symmetric import symmetric_key
+from working_with_a_file import read_json
 
 
-class Window(QMainWindow):
-    def __init__(self) -> None:
-        super().__init__()
+def main():
+    settings = read_json("settings.json") 
+    parser = argparse.ArgumentParser( description="Запуск режимов генерации ключей, шифрования и дешифрования")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('-gen', '--generation', action='store_true', help='Запускает режим генерации ключей')
+    group.add_argument('-enc', '--encryption', action='store_true', help='Запускает режим шифрования')
+    group.add_argument('-dec', '--decryption', action='store_true', help='Запускает режим дешифрования') 
+    parser.add_argument('-text', '--initial_text', type=str,
+                        default=os.path.join("lab_3", settings["initial_text"]),
+                        help='Путь к исходному тексту (lab_3/text/initial_text.txt)')
+    parser.add_argument('-public', '--public_key', type=str,
+                        default=os.path.join("lab_3", settings["asymmetric_public"]),
+                        help='Путь к публичному ключу (lab_3/key/asymmetric/public.pem)')
+    parser.add_argument('-private', '--private_key', type=str,
+                        default=os.path.join("lab_3", settings["asymmetric_private"]),
+                        help='Путь к закрытому ключу (lab_3/key/asymmetric/private.pem)') 
+    parser.add_argument('-enctext', '--encrypted_text_file', type=str,
+                        default=os.path.join("lab_3", settings["symmetric_encrypted_key"]),
+                        help='Путь к зашифрованному файлу (lab_3/key/symmetric/encrypted_key.txt)')
+    parser.add_argument('-dectext', '--decrypted_text_file', type=str,
+                        default=os.path.join("lab_3", settings["symmetric_decrypted_key"]),
+                        help='Путь к расшифрованному файлу (lab_3/key/symmetric/decrypted_key.txt)') 
 
-        self.setGeometry(800, 200, 200, 200)
-        self.setWindowTitle("Lab3-var3")
-        self.setStyleSheet('background-color: #2cf3e2;')
+    if args.generation: 
 
-        main_widget = QWidget()
-        box_layout = QVBoxLayout()
-        layout = QGridLayout()
-        src = QLabel(f"Выберете нужные действия", self)
-        box_layout.addWidget(src)
-        main_widget.setStyleSheet(
-            "max-width: 1500%;" "margin: 0 0 0 5%;" "height: auto;" "position: center;" "padding: 5% 40% 5% 40%;")
+    elif args.encryption: 
 
-        # установим кнопки
-        self.frame = self.add_button("frame")
-        self.balance_test = self.add_button("balance_test")
-        self.filter = self.add_button("filter")
-        self.max_filter = self.add_button("max_filter")
-        self.grouping = self.add_button("grouping")
-        self.draw_histogram = self.add_button("draw_histogram")
-        self.exit = self.add_button("Выйти из программы")
-
-        # форматируем виджеты по размеру окна
-        box_layout.addWidget(self.frame)
-        box_layout.addWidget(self.balance_test)
-        box_layout.addWidget(self.filter)
-        box_layout.addWidget(self.max_filter)
-        box_layout.addWidget(self.grouping)
-        box_layout.addWidget(self.draw_histogram)
-        box_layout.addWidget(self.exit)
-        box_layout.addStretch()  # кнопки вплотную
-        layout.addLayout(box_layout, 0, 0)
-
-        main_widget.setLayout(layout)
-        self.setCentralWidget(main_widget) 
-
-        # то, что будет на экране при нажатии кнопки выход из программы
-        self.exit.clicked.connect(self.close)
-
-        self.show()
-
-    def add_button(self, name: str) -> QPushButton:
-        '''принимает название поля кнопки и ее размеры'''
-        button = QPushButton(name, self)
-        button.resize(button.sizeHint())
-        button.setStyleSheet('background-color: #ee5300;') 
-        # button.setFixedSize(QSize(size_x, size_y)) 
-        return button
+    elif args.decryption: 
 
 
-if __name__ == "__main__": 
-    app = QApplication(sys.argv)
-    window = Window()
-    app.exec() 
+if __name__ == "__main__":
+    main()
