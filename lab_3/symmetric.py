@@ -6,4 +6,3 @@ def symmetric_key(byte_count: int) -> bytes:
     byte_count - количество байт 
     """
     return os.urandom(byte_count)
-
