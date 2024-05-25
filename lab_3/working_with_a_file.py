@@ -6,7 +6,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 def open_file(path: str) -> str:
-    """Осуществляет открытие файла 
+    """Осуществляет чтение из файла 
 
     path - путь к файлу, необходимый для открытия
     """
@@ -15,7 +15,7 @@ def open_file(path: str) -> str:
             main = file.read()
         return main
     except Exception as ex:
-        logging.error(f"Error opening the file: {ex.message}\n{ex.args}\n") 
+        logging.error(f"Error opening the file: {ex.message}\n{ex.args}\n")
 
 def open_key_des(path: str) -> bytes:
     """Десериализация ключа симметричного алгоритма
@@ -30,7 +30,7 @@ def open_key_des(path: str) -> bytes:
         logging.error(f"Error opening the file: {ex.message}\n{ex.args}\n") 
 
 def write_text(path: str, data: str) -> None:
-    """Осуществляет запись данных в файл
+    """Осуществляет запись данных в файл 
 
     path - путь к файлу, в который пойдет запись
     data - данные для записи
@@ -39,7 +39,7 @@ def write_text(path: str, data: str) -> None:
         with open(path, "w", encoding="utf-8") as file: 
             file.write(data)
     except Exception as ex:
-        logging.error(f"Error writing the file: {ex.message}\n{ex.args}\n")   
+        logging.error(f"Error writing the file: {ex.message}\n{ex.args}\n") 
 
 def write_key_ser(path: str, key: bytes) -> None:
     """Сериализация ключа симмеричного алгоритма в файл
@@ -51,7 +51,7 @@ def write_key_ser(path: str, key: bytes) -> None:
         with open(path, "wb", encoding="utf-8") as file: 
             file.write(key)
     except Exception as ex:
-        logging.error(f"Error writing the file: {ex.message}\n{ex.args}\n")  
+        logging.error(f"Error writing the file: {ex.message}\n{ex.args}\n") 
 
 def read_json(path: str) -> dict:
     """Осуществляет чтение данных из json-файла
@@ -63,15 +63,3 @@ def read_json(path: str) -> dict:
             return json.load(file)
     except Exception as ex:
         logging.error(f"Error reading the file: {ex.message}\n{ex.args}\n")  
-
-def saving_values(dict: dict, path: str) -> None:
-    """Осуществляет сохранение данных в json-файл
-
-    path - путь к файлу, в который пойдет запись
-    dict - данные для записи
-    """
-    try:
-        with open(path, "w", encoding="utf-8") as file:
-            file.write(json.dumps(dict, ensure_ascii=False, indent=4))
-    except Exception as ex:
-        logging.error(f"An error occurred while saving: {ex.message}\n{ex.args}\n")
