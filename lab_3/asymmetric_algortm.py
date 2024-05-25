@@ -13,28 +13,28 @@ def asymmetric_key() -> tuple[rsa.RSAPublicKey, rsa.RSAPrivateKey]:
     public_key = keys.public_key()
     return public_key, private_key
 
-def asymmetric_encryption(public: str, path_initial_key: str, path_encryption: str) -> None:
+def asymmetric_encryption(public: str, path_initial_key: str, path_save: str) -> None:
     """Осуществляет шифрование и паддинг текста асимметричным алгоритмом
 
     public - путь к файлу с public ключом
     path_initial_key - путь к файлу с исходным симметричным ключом
-    path_encryption - путь к файлу для сохранения зашифрованного симметричного ключа 
+    path_save - путь к файлу для сохранения зашифрованного симметричного ключа 
     """
     text = open_key_des(path_initial_key)
     public_key = public_key_des(public)
     encripted_text = public_key.encrypt(text, padding.OAEP(mgf=padding.MGF1(
         algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None))
-    write_text(path_encryption, encripted_text)
+    write_text(path_save, encripted_text)
 
 
-def asymmetric_decryption(private: str, path_encryption: str, path_decryption: str) -> bytes:
+def asymmetric_decryption(private: str, path_save: str, path_decryption: str) -> bytes:
     """Осуществляет дешифрование и депаддинг текста асимметричным алгоритмом
 
     private - путь к файлу с private ключом
-    path_encryption - путь к файлу с сохраненным зашифрованным симметричным ключом
+    path_save - путь к файлу с сохраненным зашифрованным симметричным ключом
     path_decryption - путь к файлу с дешифрованным симметричным ключом
     """
-    text = open_key_des(path_encryption)
+    text = open_key_des(path_save)
     private_key = private_key_des(private)
     decripted_text = private_key.decrypt(text, padding.OAEP(mgf=padding.MGF1(
         algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None))

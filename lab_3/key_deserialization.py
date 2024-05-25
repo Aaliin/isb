@@ -17,8 +17,8 @@ def public_key_des(public_pem: str)-> rsa.RSAPublicKey:
             public_bytes = pem_in.read()
         return load_pem_public_key(public_bytes)
     except Exception as ex:
-        logging.error(f"Error writing the file: {ex.message}\n{ex.args}\n")    
-            
+        logging.error(f"Error writing the file: {ex.message}\n{ex.args}\n")
+
 def private_key_des(private_pem: str)->rsa.RSAPrivateKey:
     """Осуществляет десериализацию закрытого ключа в файл
 
