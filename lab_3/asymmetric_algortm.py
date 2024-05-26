@@ -26,7 +26,6 @@ def asymmetric_encryption(path_initial_key: str, public: str, path_save: str) ->
         algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None))
     write_text_bytes(path_save, encripted_text)
 
-
 def asymmetric_decryption(path_save: str, private: str, path_decryption: str) -> bytes:
     """Осуществляет дешифрование и депаддинг текста асимметричным алгоритмом
 
