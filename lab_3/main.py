@@ -1,41 +1,65 @@
 import argparse
-import json
 import os
 
+from enum import Enum
 
-from symmetric import symmetric_key
-from working_with_a_file import read_json
+from asymmetric_algortm import asymmetric_key, asymmetric_encryption, asymmetric_decryption
+from key_serialization import private_key_ser, public_key_ser
+from symmetric_algortm import symmetric_key, symmetric_encryption, symmetric_decryption
+from working_with_a_file import write_key_ser, read_json
+
+
+class Choice(Enum):
+    GENERATE_SYMMETRIC_KEY = 0
+    GENERATE_ASYMMETRIC_KEYS = 1
+    ENCRYPT_SYMMETRIC_KEY = 2
+    ENCRYPT_TEXT = 3
+    DECRYPT_SYMMETRIC_KEY = 4
+    DECRYPT_TEXT = 5
 
 
 def main():
-    settings = read_json("settings.json") 
-    parser = argparse.ArgumentParser( description="Запуск режимов генерации ключей, шифрования и дешифрования")
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('-gen', '--generation', action='store_true', help='Запускает режим генерации ключей')
-    group.add_argument('-enc', '--encryption', action='store_true', help='Запускает режим шифрования')
-    group.add_argument('-dec', '--decryption', action='store_true', help='Запускает режим дешифрования') 
-    parser.add_argument('-text', '--initial_text', type=str,
-                        default=os.path.join("lab_3", settings["initial_text"]),
-                        help='Путь к исходному тексту (lab_3/text/initial_text.txt)')
-    parser.add_argument('-public', '--public_key', type=str,
-                        default=os.path.join("lab_3", settings["asymmetric_public"]),
-                        help='Путь к публичному ключу (lab_3/key/asymmetric/public.pem)')
-    parser.add_argument('-private', '--private_key', type=str,
-                        default=os.path.join("lab_3", settings["asymmetric_private"]),
-                        help='Путь к закрытому ключу (lab_3/key/asymmetric/private.pem)') 
-    parser.add_argument('-enctext', '--encrypted_text_file', type=str,
-                        default=os.path.join("lab_3", settings["symmetric_encrypted_key"]),
-                        help='Путь к зашифрованному файлу (lab_3/key/symmetric/encrypted_key.txt)')
-    parser.add_argument('-dectext', '--decrypted_text_file', type=str,
-                        default=os.path.join("lab_3", settings["symmetric_decrypted_key"]),
-                        help='Путь к расшифрованному файлу (lab_3/key/symmetric/decrypted_key.txt)') 
+    settings = read_json(os.path.join("lab_3", "settings.json")) 
+    parser = argparse.ArgumentParser(description="Запуск режимов генерации ключей, шифрования и дешифрования")
+    parser.add_argument("-c", "--choice", type=int,
+                        help="Выбор режима работы: "
+                            "0 - генерация симметричного ключа"
+                            "1 - генерация ассимметричных ключей"
+                            "2 - шифрование симметричного ключа"
+                            "3 - шифрование текста"
+                            "4 - дешифрование симметричного ключа"
+                            "5 - дешифрование текста") 
+    args = parser.parse_args()  
 
-    if args.generation: 
+    match (args.choice):
+        case Choice.GENERATE_SYMMETRIC_KEY.value: 
+            write_key_ser(settings["symmetric_key"], symmetric_key(16))
 
-    elif args.encryption: 
+        case Choice.GENERATE_ASYMMETRIC_KEYS.value:
+            public_key, private_key = asymmetric_key()
+            public_key_ser(settings["asymmetric_public"], public_key)
+            private_key_ser(settings["asymmetric_private"], private_key)
 
-    elif args.decryption: 
+        case Choice.ENCRYPT_SYMMETRIC_KEY.value:
+            asymmetric_encryption(
+                settings["symmetric_key"], settings["asymmetric_public"], settings["symmetric_encrypted_key"])
 
+        case Choice.ENCRYPT_TEXT.value:
+            encrypted_text = symmetric_encryption(
+                settings["initial_text"], settings["symmetric_key"], settings["encrypted_text"])
+            print(f"Зашифрованный текст: \n{encrypted_text}")
+
+        case Choice.DECRYPT_SYMMETRIC_KEY.value:
+            asymmetric_decryption(settings["symmetric_encrypted_key"],
+                                settings["asymmetric_private"], settings["symmetric_decrypted_key"])
+
+        case Choice.DECRYPT_TEXT.value:
+            decrypted_text = symmetric_decryption(
+                settings["encrypted_text"], settings["symmetric_key"], settings["decrypted_text"])
+            print(f"Дешифрованный текст: \n{decrypted_text}")
+
+        case _:
+            print("Неправильный вид работы с данными")
 
 if __name__ == "__main__":
     main()
