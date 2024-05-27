@@ -17,7 +17,7 @@ def check_hash_card(hash: str, four_signs: str, bins: list, centre_number: int) 
     Args:
         hash(str) - хеш номера банковской карты
         four_signs(str) - последние 4 цифры карты
-        bins(list) - бин карты
+        bins(list) - бины карты
         centre_number(int) - середина номера карты
 
     Returns:
@@ -39,7 +39,7 @@ def selection_number(hash: str, four_signs: str, bins: list, save_path: str) -> 
     Args:
         hash(str) - хеш номера банковской карты
         four_signs(str) - последние 4 цифры карты
-        bins(list) - бин карты
+        bins(list) - бины карты
         save_path(str) - путь к файлу, в который пойдет запись
 
     Returns:
@@ -84,4 +84,43 @@ def algorithm_luna(card_number: str) -> bool:
             print(f"Номер является не корректным")
         return sum % 10 == 0
     except Exception as ex:
-        logging.error(f"Error in algorithm_luna {ex}\n")  
+        logging.error(f"Error in algorithm_luna {ex}\n") 
+
+def finding_collision(hash: str, four_signs: str, bins: list) -> None:
+    """Осуществляет замер времени для поиска коллизии хеша при различном числе процессов
+
+    Args:
+        hash(str) - хеш номера банковской карты
+        four_signs(str) - последние 4 цифры карты
+        bins(list) - бины карты
+
+    Returns:
+        None
+    """
+    try: 
+        times = []
+        for i in range(1, int(mp.cpu_count() * 1.5)):
+            start = time.time()
+            with mp.Pool(processes=i) as p:
+                check = [(hash, four_signs, bins, i) for i in list(range(0, 1000000))]
+                for result in p.starmap(check_hash_card, check):
+                    if result:
+                        times.append(time.time() - start)
+                        break
+        plt.plot(
+            range(len(times)),
+            times,
+            color='navy', 
+            linestyle = '--', 
+            marker='*', 
+            linewidth=1, 
+            markersize=4
+        )
+        plt.bar(range(len(times)), times, color="blue")
+        plt.figure(figsize=(20, 5))
+        plt.title("Время для поиска коллизии хеша при различном числе процессов")
+        plt.ylabel("Время поиска коллизий")
+        plt.xlabel("Число процессов")
+        plt.show()
+    except Exception as ex:
+        logging.error(f"Error in finding_collision {ex}\n") 
