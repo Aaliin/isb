@@ -1,5 +1,6 @@
 import hashlib
 import logging
+import os
 import multiprocessing as mp
 import time
 
@@ -11,25 +12,23 @@ from working_with_a_file import read_json, saving_values
 logging.basicConfig(level=logging.INFO)
 
 
-def check_hash_card(hash: str, four_signs: str, bins: list, centre_number: int) -> str:
+def check_hash_card(hash: str, four_signs: str, bins: str, centre_number: int) -> str:
     """Осуществляет сравнение сгенерированного номера карты с заданным хэшем
 
     Args:
         hash(str) - хеш номера банковской карты
         four_signs(str) - последние 4 цифры карты
-        bins(list) - бины карты
+        bins(str) - бины карты
         centre_number(int) - середина номера карты
 
     Returns:
         str - текстовые данные
     """
     try:
-        for bin in bins:
-            hex_dig = f"{bin}{centre_number:0>6}{four_signs:0>4}"
-            hash_sha1 = hashlib.sha1(hex_dig.encode()).hexdigest()
-            if hash == hash_sha1:
-                print(f"Полученный хеш: \n{hex_dig}")
-                return hex_dig
+        hex_dig = f"{bins}{centre_number:0>6}{four_signs:0>4}"
+        hash_sha1 = hashlib.sha1(hex_dig.encode()).hexdigest()
+        if hash == hash_sha1:
+            return hex_dig
     except Exception as ex:
         logging.error(f"Error in check_hash_card {ex}\n")  
 
@@ -47,13 +46,14 @@ def selection_number(hash: str, four_signs: str, bins: list, save_path: str) -> 
     """
     try:
         cores = mp.cpu_count()
-        check = [(hash, four_signs, bins, i) for i in list(range(0, 1000000))]
         with mp.Pool(processes=cores) as p:
-            for result in p.starmap(check_hash_card, check):
-                if result:
-                    saving_values(result, save_path)
-                    print(f"Найденный хеш: \n{result}")
-                    return result
+            for bin in bins:
+                check = [(hash, four_signs, bin, i) for i in range(0, 1000000)]
+                for result in p.starmap(check_hash_card, check):
+                    if result: 
+                        print(f"Полученный номер: \n{result}")
+                        saving_values(result, save_path)
+                        return result
     except Exception as ex:
         logging.error(f"Error in selection_number {ex}\n")  
 
@@ -102,11 +102,13 @@ def finding_collision(hash: str, four_signs: str, bins: list) -> None:
         for i in range(1, int(mp.cpu_count() * 1.5)):
             start = time.time()
             with mp.Pool(processes=i) as p:
-                check = [(hash, four_signs, bins, i) for i in list(range(0, 1000000))]
-                for result in p.starmap(check_hash_card, check):
-                    if result:
-                        times.append(time.time() - start)
-                        break
+                for bin in bins:
+                    check = [(hash, four_signs, bin, i) for i in range(0, 1000000)]
+                    for result in p.starmap(check_hash_card, check):
+                        if result: 
+                            times.append(time.time() - start)
+                            break
+        plt.figure(figsize=(20, 5))
         plt.plot(
             range(len(times)),
             times,
@@ -117,10 +119,19 @@ def finding_collision(hash: str, four_signs: str, bins: list) -> None:
             markersize=4
         )
         plt.bar(range(len(times)), times, color="blue")
-        plt.figure(figsize=(20, 5))
         plt.title("Время для поиска коллизии хеша при различном числе процессов")
         plt.ylabel("Время поиска коллизий")
         plt.xlabel("Число процессов")
         plt.show()
     except Exception as ex:
-        logging.error(f"Error in finding_collision {ex}\n") 
+        logging.error(f"Error in finding_collision {ex}\n")
+
+
+if __name__ == "__main__": 
+    try:
+        settings = read_json(os.path.join("lab_4", "settings.json")) 
+        result = selection_number(settings["hash"], settings["four_signs"], settings["bins"], settings["card_number"])
+        algorithm_luna(result)
+        finding_collision(settings["hash"], settings["four_signs"], settings["bins"])
+    except Exception as ex:
+        logging.error(f"Error in main: {ex}\n") 

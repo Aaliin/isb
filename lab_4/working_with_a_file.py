@@ -20,11 +20,11 @@ def read_json(path: str) -> dict:
     except Exception as ex:
         logging.error(f"Error reading the file: {ex.message}\n{ex.args}\n") 
         
-def saving_values(dict: dict, path: str) -> None:
+def saving_values(result: str, path: str) -> None:
     """Осуществляет сохранение данных в json-файл
 
     Args:
-        dict(dict) - данные для записи
+        result(str) - данные для записи
         path(str) - путь к файлу, в который пойдет запись
 
     Returns:
@@ -32,6 +32,6 @@ def saving_values(dict: dict, path: str) -> None:
     """
     try:
         with open(path, "w", encoding="utf-8") as f:
-            f.write(json.dumps(dict, ensure_ascii=False, indent=4))
+            f.write(json.dumps({"card_number": result}, ensure_ascii=False, indent=4))
     except Exception as ex:
         logging.error(f"An error occurred while saving: {ex.message}\n{ex.args}\n")  
