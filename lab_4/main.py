@@ -3,13 +3,10 @@ import logging
 import os
 import sys
 
-from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import (
     QApplication,
     QGridLayout,
     QLabel,
-    QLineEdit,
     QMainWindow,
     QMessageBox,
     QPushButton,
@@ -28,7 +25,7 @@ class Window(QMainWindow):
     def __init__(self) -> None:
         """Создание главного окна"""
         super().__init__()
-        self.setGeometry(500, 200, 700, 400)
+        self.setGeometry(800, 200, 400, 200)
         self.setWindowTitle("lab_4-var3 Поиск колизии хеш-функции")
         self.setStyleSheet("background-color: #2cf3e2")
 
@@ -39,23 +36,27 @@ class Window(QMainWindow):
         settings = read_json(os.path.join("lab_4", "settings.json")) 
         self.bins = settings["bins"]
         self.hash = settings["hash"]
-        self.four_signs = settings["four_signs"]
+        self.four_signs = settings["four_signs"] 
+        self.card_number = ""
+
+        self.label_hash = QLabel(f"Hash: {self.hash}")
+        self.label_four_signs = QLabel(f"Four signs: {self.four_signs}")
+        self.label_bins = QLabel(f"Bins: {str(self.bins).strip('[]')}")
 
         self.number_search = self.add_button("Подобрать номер карты по ее хешу")
         self.luna_algorithm = self.add_button("Проверить корректность при помощи алгоритма Луна")
         self.graph_collision = self.add_button("Замерить время для поиска коллизии хеша")
-        self.exit = self.add_button("Выйти из программы")       
+        self.exit = self.add_button("Выйти из программы") 
 
-        box_layout.addWidget(self.bins)
-        box_layout.addWidget(self.hash)
-        box_layout.addWidget(self.four_signs)
+        box_layout.addWidget(self.label_hash)
+        box_layout.addWidget(self.label_bins)
+        box_layout.addWidget(self.label_four_signs) 
         box_layout.addWidget(self.number_search)
         box_layout.addWidget(self.luna_algorithm)
         box_layout.addWidget(self.graph_collision)
         box_layout.addWidget(self.exit)
         box_layout.addStretch()   
         layout.addLayout(box_layout, 0, 0)
-        layout.addWidget(self.image_label, 0, 1) 
 
         self.number_search.clicked.connect(self.hash_number)
         self.luna_algorithm.clicked.connect(self.check_correctness)
@@ -83,64 +84,56 @@ class Window(QMainWindow):
 
     def hash_number(self) -> None:
         """Вызывает функцию для подбора номера карты по ее хешу"""
-        try:
-            folder = QFileDialog.getSaveFileName(
+        try: 
+            path = QFileDialog.getSaveFileName(
                 self,
-                "Введите название папки для создания csv-файла:",
+                "Введите название файла, в который сохранить номер карты:",
+                "lab_4//",
+                "JSON File(*.json)",
             )[0]
-            if folder == "":
-                QMessageBox.information(
-                    None, "Ошибка работы программы!", "Не правильно выбрана папка")
-                return
-            a = make_list(self.dataset_path, self.classes)
-            write_in_file(a, folder)
-            QMessageBox.information(
-                None, "Результат нажатия кнопки", "Действия успешно выполнены!")
+            if (path == ""):
+                QMessageBox.information(None, "Ошибка ввода данных", "Не указаны все необходимые данные карты")
+            else:
+                result = selection_number(self.hash, self.four_signs, [int(item) for item in self.bins], path)
+                self.card_number = result
+                if result:
+                    QMessageBox.information(None, "Результат нажатия", "Номер карты найден")
+                else:
+                    QMessageBox.information(None, "Результат нажатия", "Номер карты не найден")
         except Exception as ex:
             logging.error(f"Error in hash_number: {ex}\n") 
 
     def check_correctness(self) -> None:
         """Вызывает функцию для проверки корректности при помощи алгоритма Луна"""
         try:
-            path_base = QFileDialog.getOpenFileName(
-                self, "Выберите файл для итерации:")[0]
-            path_new = QFileDialog.getSaveFileName(
-                self, "Выберите файл куда итерируем:")[0]
-            if path_new == "" or path_base == "":
-                return
-            self.choice_iterator = ChoiceIterator(os.path.relpath(path_base.rpartition('.')[0]),
-                                                os.path.relpath(path_new), self.classes[0], self.classes[1])
+            if self.card_number == "":
+                QMessageBox.information(None, "Номер карты не найден", "Не подобран номер карты")
+            else:
+                result = algorithm_luna(self.card_number)
+                if result:
+                    QMessageBox.information(None, "Результат нажатия", "Номер является корректным")
+                else:
+                    QMessageBox.information(None, "Результат нажатия", "Номер является некорректным")
         except Exception as ex:
             logging.error(f"Error in check_correctness: {ex}\n") 
 
     def plotting(self) -> None:
-        """Вызывает функцию для построения графика времени поиска коллизии хеша от числа процессов"""
+        """Вызывает функцию для построения графика времени поиска коллизии хеша от числа процессов"""  
         try:
-            folder = QFileDialog.getSaveFileName(
-                self,
-                "Введите название папки для создания csv-файла:",
-            )[0]
-            if folder == "":
-                QMessageBox.information(
-                    None, "Ошибка работы программы!", "Не правильно выбрана папка")
-                return
-            write_in_new(self.dataset_path, self.classes, folder, number)
-            QMessageBox.information(
-                None, "Результат нажатия кнопки", "Действия успешно выполнены!")
+            if self.card_number == "":
+                QMessageBox.information(None, "Номер карты не найден", "Не подобран номер карты")
+            else:
+                finding_collision(self.hash, self.four_signs, [int(item) for item in self.bins])
+                QMessageBox.information(None, "Результат нажатия", "График успешно построен")
         except Exception as ex:
             logging.error(f"Error in plotting: {ex}\n") 
 
 
 if __name__ == "__main__": 
     try:
-        parser = argparse.ArgumentParser(description="Запуск режимов работы с хешем")
-        parser.add_argument("-j", "--json_file", type= str,
-                        default=os.path.join("lab_4", "settings.json"),
-                        help= "Путь к файлу json")
-        args = parser.parse_args()
         app = QApplication(sys.argv)
         window = Window()
         window.show()
-        sys.exit(app.exec_())
+        sys.exit(app.exec())
     except Exception as ex:
         logging.error(f"Error in main: {ex}\n") 
