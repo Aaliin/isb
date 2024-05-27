@@ -9,17 +9,25 @@ from working_with_a_file import open_file, open_key_des, open_file_bytes, write_
 
 def symmetric_key(byte_count: int) -> bytes:
     """Генерация ключа симметричного алгоритма шифрования
+    
+    Args:
+        byte_count(int) - количество байт 
 
-    byte_count - количество байт 
+    Returns:
+        bytes - сгенерированный симметричный ключ
     """
     return os.urandom(byte_count)
 
 def symmetric_encryption(path_initial: str, path_public: str, path_save: str) -> bytes:
     """Осуществляет шифрование и паддинг текста симметричным алгоритмом
 
-    path_initial - путь к шифруемому текстовому файлу
-    path_public - путь к файлу с зашированным ключом симметричного алгоритма
-    path_save - путь, по которому сохранить зашифрованный текстовый файл
+    Args:
+        path_initial(str) - путь к шифруемому текстовому файлу
+        path_public(str) - путь к файлу с зашированным ключом симметричного алгоритма
+        path_save(str) - путь, по которому сохранить зашифрованный текстовый файл
+
+    Returns:
+        bytes - зашифрованный текст
     """ 
     padder = padding.ANSIX923(128).padder()
     initial_text = open_file(path_initial)
@@ -36,9 +44,13 @@ def symmetric_encryption(path_initial: str, path_public: str, path_save: str) ->
 def symmetric_decryption(path_initial: str, path_private: str, path_save: str) -> str:
     """Осуществляет дешифрование и депаддинг текста симметричным алгоритмом
 
-    path_initial - путь к зашифрованному файлу
-    path_private - путь к файлу с дешированным ключом симметричного алгоритма
-    path_save - путь, по которому сохранить дешифрованный текстовый файл
+    Args:
+        path_initial(str) - путь к зашифрованному файлу
+        path_private(str) - путь к файлу с дешированным ключом симметричного алгоритма
+        path_save(str) - путь, по которому сохранить дешифрованный текстовый файл
+        
+    Returns:
+        bytes - дэшифрованный текст
     """ 
     encrypted_text = open_file_bytes(path_initial)
     private_key = open_key_des(path_private)

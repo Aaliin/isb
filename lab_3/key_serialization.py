@@ -10,8 +10,12 @@ logging.basicConfig(level=logging.INFO)
 def public_key_ser(public_pem: str, public_key: rsa.RSAPublicKey)-> None:
     """Осуществляет сериализацию открытого ключа в файл
 
-    public_pem - путь к файлу, в который пойдет запись 
-    public_key - открытый rsa ключ
+    Args:
+        public_pem(str) - путь к файлу, в который пойдет запись 
+        public_key(rsa.RSAPublicKey) - открытый rsa ключ
+        
+    Returns:
+        None
     """ 
     try:
         with open(public_pem, 'wb') as public_out:
@@ -23,8 +27,12 @@ def public_key_ser(public_pem: str, public_key: rsa.RSAPublicKey)-> None:
 def private_key_ser(private_pem: str, private_key: rsa.RSAPrivateKey)->None:
     """Осуществляет сериализацию закрытого ключа в файл
 
-    public_pem - путь к файлу, в который пойдет запись 
-    private_key - закрытый rsa ключ
+    Args:
+        public_pem(str) - путь к файлу, в который пойдет запись 
+        private_key(rsa.RSAPrivateKey) - закрытый rsa ключ
+        
+    Returns:
+        None
     """ 
     try:
         with open(private_pem, 'wb') as private_out:

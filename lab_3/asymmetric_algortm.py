@@ -7,7 +7,11 @@ from working_with_a_file import open_key_des, write_key_ser, write_text_bytes
 
 
 def asymmetric_key() -> tuple[rsa.RSAPublicKey, rsa.RSAPrivateKey]:
-    """Генерация пары ключей для асимметричного алгоритма шифрования"""
+    """Генерация пары ключей для асимметричного алгоритма шифрования
+    
+    Returns:
+        tuple[rsa.RSAPublicKey, rsa.RSAPrivateKey] - кортеж с сгенерированным открытым и закрытым ключам
+    """
     keys = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     private_key = keys
     public_key = keys.public_key()
@@ -16,9 +20,13 @@ def asymmetric_key() -> tuple[rsa.RSAPublicKey, rsa.RSAPrivateKey]:
 def asymmetric_encryption(path_initial_key: str, public: str, path_save: str) -> None:
     """Осуществляет шифрование и паддинг текста асимметричным алгоритмом
 
-    path_initial_key - путь к файлу с исходным симметричным ключом
-    public - путь к файлу с public ключом
-    path_save - путь к файлу для сохранения зашифрованного симметричного ключа 
+    Args:
+        path_initial_key(str) - путь к файлу с исходным симметричным ключом
+        public(str) - путь к файлу с public ключом
+        path_save(str) - путь к файлу для сохранения зашифрованного симметричного ключа 
+        
+    Returns:
+        None
     """
     text = open_key_des(path_initial_key)
     public_key = public_key_des(public)
@@ -29,9 +37,13 @@ def asymmetric_encryption(path_initial_key: str, public: str, path_save: str) ->
 def asymmetric_decryption(path_save: str, private: str, path_decryption: str) -> bytes:
     """Осуществляет дешифрование и депаддинг текста асимметричным алгоритмом
 
-    path_save - путь к файлу с сохраненным зашифрованным симметричным ключом
-    private - путь к файлу с private ключом
-    path_decryption - путь к файлу с дешифрованным симметричным ключом
+    Args:
+        path_save(str) - путь к файлу с сохраненным зашифрованным симметричным ключом
+        private(str) - путь к файлу с private ключом
+        path_decryption(str) - путь к файлу с дешифрованным симметричным ключом
+        
+    Returns:
+        bytes - дешифрованный текст
     """
     text = open_key_des(path_save)
     private_key = private_key_des(private)

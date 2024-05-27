@@ -9,8 +9,12 @@ logging.basicConfig(level=logging.INFO)
 
 def public_key_des(public_pem: str)-> rsa.RSAPublicKey:
     """Осуществляет десериализацию открытого ключа в файл
-
-    public_pem - путь к файлу, в который пойдет запись  
+    
+    Args:
+        public_pem(str) - путь к файлу, в который пойдет запись  
+        
+    Returns:
+        rsa.RSAPublicKey - открытый ключ
     """ 
     try:
         with open(public_pem, 'rb') as pem_in:
@@ -23,7 +27,11 @@ def public_key_des(public_pem: str)-> rsa.RSAPublicKey:
 def private_key_des(private_pem: str)->rsa.RSAPrivateKey:
     """Осуществляет десериализацию закрытого ключа в файл
 
-    private_pem - путь к файлу, в который пойдет запись  
+    Args:
+        private_pem(str) - путь к файлу, в который пойдет запись  
+        
+    Returns:
+        rsa.RSAPrivateKey - приватный ключ 
     """ 
     try:
         with open(private_pem, 'rb') as pem_in:
