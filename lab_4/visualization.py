@@ -25,7 +25,7 @@ def check_hash_card(hash: str, four_signs: str, bins: str, centre_number: int) -
         str - текстовые данные
     """
     try:
-        hex_dig = f"{bins}{centre_number:0>4}{four_signs:0>4}"
+        hex_dig = f"{bins}{centre_number:0>8}{four_signs:0>4}"
         hash_sha1 = hashlib.sha1(hex_dig.encode()).hexdigest()
         if hash == hash_sha1:
             return hex_dig
@@ -81,7 +81,7 @@ def algorithm_luna(card_number: str) -> bool:
         if(sum % 10 == 0):
             print(f"Номер является корректным")
         else: 
-            print(f"Номер является не корректным")
+            print(f"Номер является некорректным")
         return sum % 10 == 0
     except Exception as ex:
         logging.error(f"Error in algorithm_luna {ex}\n") 
