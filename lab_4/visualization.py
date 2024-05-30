@@ -25,7 +25,7 @@ def check_hash_card(hash: str, four_signs: str, bins: str, centre_number: int) -
         str - текстовые данные
     """
     try:
-        hex_dig = f"{bins}{centre_number:0>8}{four_signs:0>4}"
+        hex_dig = f"{bins}{centre_number:0>6}{four_signs:0>4}"
         hash_sha1 = hashlib.sha1(hex_dig.encode()).hexdigest()
         if hash == hash_sha1:
             return hex_dig
@@ -48,7 +48,7 @@ def selection_number(hash: str, four_signs: str, bins: list, save_path: str) -> 
         cores = mp.cpu_count()
         with mp.Pool(processes=cores) as p:
             for bin in bins:
-                check = [(hash, four_signs, bin, i) for i in range(0, 100000000)]
+                check = [(hash, four_signs, bin, i) for i in range(0, 1000000)]
                 for result in p.starmap(check_hash_card, check):
                     if result: 
                         print(f"Полученный номер: \n{result}")
@@ -103,7 +103,7 @@ def finding_collision(hash: str, four_signs: str, bins: list) -> None:
             start = time.time()
             with mp.Pool(processes=i) as p:
                 for bin in bins:
-                    check = [(hash, four_signs, bin, i) for i in range(0, 100000000)]
+                    check = [(hash, four_signs, bin, i) for i in range(0, 1000000)]
                     for result in p.starmap(check_hash_card, check):
                         if result: 
                             times.append(time.time() - start)
