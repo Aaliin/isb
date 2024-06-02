@@ -25,7 +25,7 @@ class Window(QMainWindow):
     def __init__(self) -> None:
         """Создание главного окна"""
         super().__init__()
-        self.setGeometry(800, 200, 400, 200)
+        self.setGeometry(100, 200, 400, 200)
         self.setWindowTitle("lab_4-var3 Поиск колизии хеш-функции")
         self.setStyleSheet("background-color: #2cf3e2")
 

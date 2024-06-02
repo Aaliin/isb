@@ -78,11 +78,11 @@ def algorithm_luna(card_number: str) -> bool:
                 sum += sign
             else:
                 sum += sign
-        if(sum % 10 == 0):
+        if ((10 - (sum % 10) % 10) == int(card_number[-1])):
             print(f"Номер является корректным")
-        else: 
+        else:
             print(f"Номер является некорректным")
-        return sum % 10 == 0
+        return (10 - (sum % 10) % 10) == int(card_number[-1])
     except Exception as ex:
         logging.error(f"Error in algorithm_luna {ex}\n") 
 
